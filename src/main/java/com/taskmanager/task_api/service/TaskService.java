@@ -1,7 +1,6 @@
 package com.taskmanager.task_api.service;
 
 import com.taskmanager.task_api.entity.Task;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
