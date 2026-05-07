@@ -1,5 +1,6 @@
 package com.taskmanager.task_api.controller;
 
+import com.taskmanager.task_api.dto.TaskResponse;
 import com.taskmanager.task_api.entity.Task;
 import com.taskmanager.task_api.service.TaskService;
 import jakarta.validation.Valid;
@@ -21,20 +22,20 @@ public class TaskController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Task> getAllTasks() {
+    public List<TaskResponse> getAllTasks() {
         return this.taskService.getAllTasks();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task getTaskById(@PathVariable("id") Long id) {
+    public TaskResponse getTaskById(@PathVariable("id") Long id) {
         return this.taskService.getTaskById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@Valid @RequestBody Task task) {
-        return this.taskService.saveTasks(task);
+    public TaskResponse createTask(@Valid @RequestBody Task task) {
+        return this.taskService.createTask(task);
     }
 
     @DeleteMapping({"/{id}"})
@@ -44,8 +45,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Task> patchTask(@Valid @RequestBody Task patchedTask, @PathVariable("id") Long id) {
-        Task patchTask = this.taskService.patchTask(patchedTask, id);
+    public ResponseEntity<TaskResponse> patchTask(@Valid @RequestBody Task patchedTask, @PathVariable("id") Long id) {
+        TaskResponse patchTask = this.taskService.patchTask(patchedTask, id);
         if (patchTask == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -54,7 +55,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task updateTask(@Valid @RequestBody Task taskObject, @PathVariable("id") Long id) {
+    public TaskResponse updateTask(@Valid @RequestBody Task taskObject, @PathVariable("id") Long id) {
         return this.taskService.updateTask(taskObject, id);
     }
 }

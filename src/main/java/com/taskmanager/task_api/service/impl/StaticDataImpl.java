@@ -1,5 +1,6 @@
 package com.taskmanager.task_api.service.impl;
 
+import com.taskmanager.task_api.dto.TaskResponse;
 import com.taskmanager.task_api.entity.Task;
 import com.taskmanager.task_api.service.TaskService;
 import com.taskmanager.task_api.util.TaskMapper;
@@ -32,23 +33,27 @@ public class StaticDataImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return new ArrayList<>(this.tasks.values());
+    public List<TaskResponse> getAllTasks() {
+        return new ArrayList<>(this.tasks.values()
+                .stream()
+                .map(TaskMapper::mapToTaskResponse)
+                .toList());
     }
 
     @Override
-    public Task getTaskById(Long id) {
+    public TaskResponse getTaskById(Long id) {
         if (this.tasks.containsKey(id)) {
-            return this.tasks.get(id);
+            Task task = getTask(id);
+            return TaskMapper.mapToTaskResponse(this.tasks.get(id));
         }
         return null;
     }
 
     @Override
-    public Task saveTasks(Task task) {
+    public TaskResponse createTask(Task task) {
         this.tasks.put(this.currentId + 1L, task);
         currentId += 1L;
-        return task;
+        return TaskMapper.mapToTaskResponse(task);
     }
 
     @Override
@@ -57,18 +62,22 @@ public class StaticDataImpl implements TaskService {
     }
 
     @Override
-    public Task patchTask(Task patchedTask, Long id) {
-        Task taskEntity = this.getTaskById(id);
+    public TaskResponse patchTask(Task patchedTask, Long id) {
+        Task taskEntity = this.getTask(id);
         TaskMapper.copyNonNullData(taskEntity, patchedTask);
         this.tasks.put(id, taskEntity);
-        return taskEntity;
+        return TaskMapper.mapToTaskResponse(taskEntity);
     }
 
     @Override
-    public Task updateTask(Task taskObject, Long id) {
-        Task taskEntity = this.getTaskById(id);
+    public TaskResponse updateTask(Task taskObject, Long id) {
+        Task taskEntity = this.getTask(id);
         TaskMapper.copyAllData(taskEntity, taskObject);
         this.tasks.put(id, taskEntity);
-        return taskEntity;
+        return TaskMapper.mapToTaskResponse(taskEntity);
+    }
+
+    private Task getTask(Long id) {
+        return this.tasks.get(id);
     }
 }

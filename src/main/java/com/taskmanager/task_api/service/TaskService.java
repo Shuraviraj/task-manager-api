@@ -1,19 +1,20 @@
 package com.taskmanager.task_api.service;
 
+import com.taskmanager.task_api.dto.TaskResponse;
 import com.taskmanager.task_api.entity.Task;
 
 import java.util.List;
 
 public interface TaskService {
-    List<Task> getAllTasks();
+    List<TaskResponse> getAllTasks();
 
-    Task getTaskById(Long id);
+    TaskResponse getTaskById(Long id);
 
-    Task saveTasks(Task task);
+    TaskResponse createTask(Task task);
 
     void deleteById(Long id);
 
-    Task patchTask(Task patchedTask, Long id);
+    TaskResponse patchTask(Task patchedTask, Long id);
 
-    Task updateTask(Task taskObject, Long id);
+    TaskResponse updateTask(Task taskObject, Long id);
 }
