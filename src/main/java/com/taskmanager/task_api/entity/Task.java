@@ -23,4 +23,8 @@ public class Task {
 
     @NotBlank(message = "Status cannot be empty")
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser assignedUser;
 }

@@ -38,7 +38,11 @@ public class SecurityConfig {
                 // /auth/** = public (register, login — no token needed)
                 // Everything else = must have valid JWT token
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**"
+                                ).permitAll()
                         .anyRequest().authenticated()
                 )
 
