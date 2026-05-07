@@ -5,6 +5,9 @@ import com.taskmanager.task_api.entity.Task;
 import com.taskmanager.task_api.service.TaskService;
 import com.taskmanager.task_api.util.TaskMapper;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,11 +36,17 @@ public class StaticDataImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponse> getAllTasks() {
-        return new ArrayList<>(this.tasks.values()
+    public Page<TaskResponse> getAllTasks(int page, int size) {
+        List<TaskResponse> allTasks = new ArrayList<>(this.tasks.values()
                 .stream()
                 .map(TaskMapper::mapToTaskResponse)
                 .toList());
+        
+        int start = page * size;
+        int end = Math.min(start + size, allTasks.size());
+        
+        List<TaskResponse> pageContent = allTasks.subList(start, end);
+        return new PageImpl<>(pageContent, PageRequest.of(page, size), allTasks.size());
     }
 
     @Override

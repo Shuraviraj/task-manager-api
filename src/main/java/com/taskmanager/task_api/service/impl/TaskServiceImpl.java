@@ -8,6 +8,9 @@ import com.taskmanager.task_api.repository.UserRepository;
 import com.taskmanager.task_api.service.TaskService;
 import com.taskmanager.task_api.util.TaskMapper;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,9 +32,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponse> getAllTasks() {
+    public Page<TaskResponse> getAllTasks(int page, int size) {
         AppUser appUser = findByUserNameUserRepo(getLoggedInUserName());
-        return TaskMapper.mapToTaskResponse(taskRepository.findByAssignedUser(appUser));
+        Pageable pageable = PageRequest.of(page, size);
+        return taskRepository.findByAssignedUser(appUser, pageable)
+                .map(TaskMapper::mapToTaskResponse);
     }
 
     @Override
