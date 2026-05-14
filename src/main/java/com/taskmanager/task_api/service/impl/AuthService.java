@@ -1,7 +1,8 @@
-package com.taskmanager.task_api.security;
+package com.taskmanager.task_api.service.impl;
 
 import com.taskmanager.task_api.entity.AppUser;
 import com.taskmanager.task_api.repository.UserRepository;
+import com.taskmanager.task_api.security.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

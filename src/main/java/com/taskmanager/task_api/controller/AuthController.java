@@ -1,6 +1,6 @@
 package com.taskmanager.task_api.controller;
 
-import com.taskmanager.task_api.security.AuthService;
+import com.taskmanager.task_api.service.impl.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
