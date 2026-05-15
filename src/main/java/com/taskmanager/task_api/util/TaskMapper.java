@@ -38,7 +38,7 @@ public class TaskMapper {
                 .title(source.getTitle())
                 .description(source.getDescription())
                 .status(source.getStatus())
-                .assignedTo(source.getAssignedUser().getUsername())
+                .assignedTo(source.getAssignedUser() == null ? "unknown user" : source.getAssignedUser().getUsername())
                 .build();
     }
 

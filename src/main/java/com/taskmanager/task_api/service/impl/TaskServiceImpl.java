@@ -35,13 +35,23 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskResponse> getAllTasks(int page, int size) {
-        String username = getLoggedInUserName();
-        AppUser appUser = findByUserNameUserRepo(username);
         Pageable pageable = PageRequest.of(page, size);
+        Page<TaskResponse> response;
 
-        log.info("Fetching tasks for user: {}, page: {}, size: {}", username, page, size);
-        return taskRepository.findByAssignedUser(appUser, pageable)
-                .map(TaskMapper::mapToTaskResponse);
+        if (isUserAdmin()) {
+            response = taskRepository.findAll(pageable)
+                    .map(TaskMapper::mapToTaskResponse);
+            log.info("Admin user fetching all tasks, page: {}, size: {}", page, size);
+        } else {
+
+            String username = getLoggedInUserName();
+            AppUser appUser = findByUserNameUserRepo(username);
+
+            response = taskRepository.findByAssignedUser(appUser, pageable)
+                    .map(TaskMapper::mapToTaskResponse);
+            log.info("Fetching tasks for user: {}, page: {}, size: {}", username, page, size);
+        }
+        return response;
     }
 
     @Override
@@ -109,5 +119,12 @@ public class TaskServiceImpl implements TaskService {
 
     private String getLoggedInUserName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    private boolean isUserAdmin() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 }
