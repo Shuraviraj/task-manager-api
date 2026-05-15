@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Profile("dev")
+@Profile("mock")
 public class StaticDataImpl implements TaskService {
 
     private static final Logger log = LoggerFactory.getLogger(StaticDataImpl.class);
